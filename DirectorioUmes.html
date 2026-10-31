@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio Telefónico UMES Central</title>
+    <style>
+        :root {
+            /* Colores corporativos basados en la imagen proporcionada */
+            --primary-color: #0b4a36; /* Verde oscuro UMES */
+            --secondary-color: #126349; /* Verde ligeramente más claro para contrastes */
+            --background-light: #f4f7f6;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --border-color: #e0e6ed;
+            --hover-color: #e8f0fe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Estilo para el logo */
+        .logo-umes {
+            height: 70px;
+            background-color: var(--text-light); /* Fondo blanco para que resalte el logo verde */
+            padding: 5px 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-title-container h1 {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .header-title-container p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .counter {
+            background-color: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"], select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+            min-width: 250px;
+            transition: all 0.2s ease-in-out;
+            background-color: #fcfcfc;
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: var(--secondary-color);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(18, 99, 73, 0.15);
+        }
+
+        .table-container {
+            background-color: var(--text-light);
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            max-height: 70vh;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            font-weight: 500;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.05);
+        }
+
+        tbody tr {
+            transition: background-color 0.15s;
+        }
+
+        tbody tr:hover {
+            background-color: #eaf1ef; /* Verde muy claro al pasar el mouse */
+        }
+
+        .badge {
+            background-color: #f0f4f8;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            border: 1px solid #dce4ec;
+            display: inline-block;
+        }
+
+        .email-link {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .email-link:hover {
+            text-decoration: underline;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header-left {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <!-- Logotipo de la UMES integrado aquí -->
+            <img src="logo.png" alt="Logo Universidad Mesoamericana" class="logo-umes">
+            <div class="header-title-container">
+                <h1>Directorio Telefónico Institucional</h1>
+                <p>Universidad Mesoamericana - Campus Central</p>
+                <a href="contactoxela.html" style="display: inline-block; margin-top: 10px; padding: 6px 15px; background-color: #ffffff; color: var(--primary-color); text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 13px; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">Ver Directorio Xela (Zona 3 y Américas)</a
+            </div>
+        </div>
+        <div class="counter" id="resultCount">0 contactos</div>
+    </header>
+
+    <main>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, puesto, extensión o correo..." autocomplete="off">
+            <select id="levelFilter">
+                <option value="Todos">Todos los Niveles / Áreas</option>
+                <option value="Primer Nivel">Primer Nivel</option>
+                <option value="Segundo Nivel">Segundo Nivel</option>
+                <option value="Tercer Nivel">Tercer Nivel</option>
+                <option value="Cuarto Nivel">Cuarto Nivel</option>
+                <option value="Quinto Nivel">Quinto Nivel</option>
+                <option value="Edificio L">Edificio L</option>
+                <option value="Edificio B">Edificio B</option>
+                <option value="Garita / Exterior">Garita / Exterior</option>
+                <option value="Información General">Información General / Otros</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table id="directoryTable">
+                <thead>
+                    <tr>
+                        <th>Nombre y Apellidos</th>
+                        <th>Puesto / Cargo</th>
+                        <th>Ubicación</th>
+                        <th>Ext.</th>
+                        <th>Correo Electrónico</th>
+                        <th>Teléfono</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Los datos se inyectarán vía JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        // La misma base de datos completa que la versión anterior
+        const directoryData = [
+            // --- PRIMER NIVEL ---
+            { nombre: "García Kennedy- Bickford, María Teresa, Mgtr.", puesto: "Secretaria General", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "301", correo: "gallegosromulo@gmail.com", movil: "3088-6413" },
+            { nombre: "Chavarría, Paulina", puesto: "Asistente Secretaria General", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "302", correo: "secrec2@umes.edu.gt", movil: "5904-4008" },
+            { nombre: "Santiesteban, Adaliz", puesto: "Secretaria General / Turno matutino", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "309", correo: "secretario2@umes.edu.gt", movil: "-" },
+            { nombre: "González, Elma", puesto: "Secretaria General / Turno matutino (Inactivo)", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "309", correo: "secretaria2@umes.edu.gt", movil: "-" },
+            { nombre: "Cano, Vivian", puesto: "Secretaria General / Turno matutino", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "308", correo: "secretaria4@umes.edu.gt", movil: "-" },
+            { nombre: "Perez, Karla", puesto: "Secretario General / Turno matutino", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "308", correo: "secretario4@umes.edu.gt", movil: "23456784" },
+            { nombre: "Rivera, Heidy", puesto: "Secretario General / Turno vespertino", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "307", correo: "secretario5@umes.edu.gt", movil: "23456784" },
+            { nombre: "García, Arlette", puesto: "Secretario General / Turno vespertino", ubicacion: "Secretaría General- Primer Nivel", nivel: "Primer Nivel", extension: "312", correo: "secretaria3@umes.edu.gt", movil: "-" },
+            { nombre: "Pérez, Mariana", puesto: "Encargada de Centro de Copiado", ubicacion: "Centro de copiado- Primer Nivel", nivel: "Primer Nivel", extension: "202", correo: "centrodeimpresion@umes.edu.gt", movil: "4265-5691" },
+            { nombre: "Subuyuj, Karla Abigail", puesto: "Enfermera", ubicacion: "Enfermería- Primer Nivel", nivel: "Primer Nivel", extension: "207", correo: "-", movil: "3039-7534" },
+            { nombre: "Chew Paiz, Aracely", puesto: "Encargada de Cobros", ubicacion: "Caja- Primer Nivel", nivel: "Primer Nivel", extension: "303", correo: "admon1@umes.edu.gt", movil: "3325-4726" },
+            { nombre: "Arroyave, David", puesto: "Encargado de Cobros", ubicacion: "Caja- Primer Nivel", nivel: "Primer Nivel", extension: "303", correo: "admon2@umes.edu.gt", movil: "-" },
+            { nombre: "Figueroa, Paola", puesto: "Administradora Cafetería", ubicacion: "Cafetería - Primer Nivel", nivel: "Primer Nivel", extension: "24754069", correo: "-", movil: "-" },
+
+            // --- CONTACT CENTER Y RECEPCION ---
+            { nombre: "Bran, Diego", puesto: "Agente de Contact Center 1", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "206 / 2413-8021", correo: "contactcenter1@umes.edu.gt", movil: "-" },
+            { nombre: "Aide", puesto: "Agente de Contact Center 2", ubicacion: "Primer Nivel", nivel: "Primer Nivel", extension: "205", correo: "contactcenter2@umes.edu.gt", movil: "-" },
+            { nombre: "Aide", puesto: "Agente de Contact Center 3", ubicacion: "Primer Nivel", nivel: "Primer Nivel", extension: "205", correo: "contactcenter3@umes.edu.gt", movil: "-" },
+            { nombre: "No especificado", puesto: "Agente de Contact Center 4", ubicacion: "Primer Nivel", nivel: "Primer Nivel", extension: "203", correo: "contactcenter4@umes.edu.gt", movil: "-" },
+            { nombre: "No especificado", puesto: "Agente de Contact Center 5", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "203", correo: "contactcenter5@umes.edu.gt", movil: "-" },
+            { nombre: "Saban, Alison", puesto: "Agente de Contact Center 6", ubicacion: "Primer Nivel", nivel: "Primer Nivel", extension: "204", correo: "contactcenter6@umes.edu.gt", movil: "3630-0105" },
+            { nombre: "No especificado", puesto: "Agente de Contact Center 7", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "204", correo: "contactcenter7@umes.edu.gt", movil: "-" },
+            { nombre: "Flores, Dannya Melissa", puesto: "Agente de Contact Center 8", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "206", correo: "contactcenter8@umes.edu.gt", movil: "-" },
+            { nombre: "Meza, Alejandro", puesto: "Ejecutivo de admisiones 1", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "409", correo: "ejecutivo1@umes.edu.gt", movil: "-" },
+            { nombre: "Joaquín, Arlin", puesto: "Ejecutiva de admisiones 2", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "409", correo: "ejecutivo2@umes.edu.gt", movil: "-" },
+            { nombre: "Baten, Brenda Liliana", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion1@umes.edu.gt", movil: "-" },
+            { nombre: "Corado, Mario", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion2@umes.edu.gt", movil: "-" },
+            { nombre: "Montenegro, Douglas", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300 / 503", correo: "recepcion3@umes.edu.gt", movil: "5856-8068" },
+            { nombre: "Jeronimo, Andrea", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion4@umes.edu.gt", movil: "-" },
+            { nombre: "Rodas, Otto, Lic.", puesto: "Ejecutivo de admisiones", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "409", correo: "ejecutivo2@umes.edu.gt", movil: "3647-2852" },
+
+            // --- SEGUNDO Y TERCER NIVEL ---
+            { nombre: "No especificado", puesto: "Encargada de Biblioteca", ubicacion: "Biblioteca- Segundo Nivel", nivel: "Segundo Nivel", extension: "200", correo: "biblioteca@umes.edu.gt", movil: "-" },
+            { nombre: "Muñoz, María José", puesto: "Auxiliar de Contabilidad", ubicacion: "Contabilidad- Tercer Nivel A3-9", nivel: "Tercer Nivel", extension: "304", correo: "contabilidad1@umes.edu.gt", movil: "5524-6944" },
+            { nombre: "Miguel, Janeth", puesto: "Auxiliar de Contabilidad", ubicacion: "Contabilidad- Tercer Nivel A3-9", nivel: "Tercer Nivel", extension: "304", correo: "contabilidad2@umes.edu.gt", movil: "5524-6944" },
+            { nombre: "Cóncoba, Astrid", puesto: "Auxiliar de Contabilidad", ubicacion: "Contabilidad- Tercer Nivel", nivel: "Tercer Nivel", extension: "304", correo: "admon1@umes.edu.gt", movil: "-" },
+            { nombre: "Valdez, Rolando, Lic.", puesto: "Asesor Inst. Educación en Línea / Director ESCE", ubicacion: "Educación en Línea- Tercer Nivel / Of. A4-4", nivel: "Tercer Nivel", extension: "317 / 401", correo: "mroman@umes.edu.gt / isel@umes.edu.gt", movil: "5825-3625" },
+            { nombre: "Lic. Susan", puesto: "Desarrollador Instruccional", ubicacion: "Instituto de Educación en Línea- Tercer Nivel", nivel: "Tercer Nivel", extension: "316", correo: "ebarrios@umes.edu.gt", movil: "3361-9066" },
+            { nombre: "Lic. Ramses", puesto: "Desarrollador Instruccional", ubicacion: "Instituto de Educación en Línea- Tercer Nivel", nivel: "Tercer Nivel", extension: "315", correo: "desarrolladorweb@umes.edu.gt", movil: "4420-6369" },
+            { nombre: "Monzon, Guillermo", puesto: "Coordinador de Psicología", ubicacion: "3 nivel salón", nivel: "Tercer Nivel", extension: "314", correo: "guillermo.monzon@umes.edu.gt", movil: "4555-1217" },
+            { nombre: "Escobar, David", puesto: "Encargado de Laboratorios", ubicacion: "3 nivel ( ISEL )", nivel: "Tercer Nivel", extension: "-", correo: "descobar@umes.edu.gt", movil: "4846-0335" },
+            { nombre: "Alvarez, Jonathan", puesto: "Encargado de Laboratorios", ubicacion: "3 nivel ( ISEL )", nivel: "Tercer Nivel", extension: "-", correo: "-", movil: "5131-6646" },
+
+            // --- CUARTO NIVEL ---
+            { nombre: "Erazo, Beatriz, Mgtr.", puesto: "Decana Facultad Ciencias Humanas y Sociales", ubicacion: "Oficina A4-1- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "407", correo: "dechum@umes.edu.gt", movil: "5828-1907" },
+            { nombre: "Paiz, Madelyn", puesto: "Secretaria Facultad Com. Social", ubicacion: "Oficina A4-2- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "406", correo: "mpaiz@umes.edu.gt", movil: "5311-1059" },
+            { nombre: "Antuche, Norma", puesto: "Secretaria Facultad Ciencias Com. Social", ubicacion: "Oficina A4-3- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "400", correo: "seccom@umes.edu.gt", movil: "5575-0131" },
+            { nombre: "Yaquian, Carlos", puesto: "Asistente de ESCE", ubicacion: "Oficina A4-3- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "319", correo: "isel@umes.edu.gt", movil: "-" },
+            { nombre: "Silva, Bryan", puesto: "Asistente de Marketing", ubicacion: "Oficina A4-6- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "402", correo: "admisiones4@umes.edu.gt", movil: "3059-7084" },
+            { nombre: "Guerrero, Jesica Mgtr.", puesto: "Encargada de Marketing", ubicacion: "Oficina A4-7- Cuarto Nivel", nivel: "Cuarto Nivel", extension: "403", correo: "marketing@umes.edu.gt / info@umes.edu.gt", movil: "5709-6126" },
+            { nombre: "Romero, Juan Francisco, Dr.", puesto: "Decano Facultad Ciencias Com. Social", ubicacion: "Oficina A4-10, Cuarto Nivel", nivel: "Cuarto Nivel", extension: "405", correo: "romerojuan@umes.edu.gt", movil: "-" },
+            { nombre: "Anleu, Nery, Lic.", puesto: "Decano Facultad Ciencias Jurídicas", ubicacion: "Cuarto Nivel", nivel: "Cuarto Nivel", extension: "311", correo: "decjuridicas@umes.edu.gt", movil: "3094-7228" },
+
+            // --- QUINTO NIVEL ---
+            { nombre: "Gallegos, Rómulo, Pbro. Mgtr.", puesto: "Rector", ubicacion: "Rectoría- Quinto Nivel", nivel: "Quinto Nivel", extension: "500", correo: "gallegosromulo@umes.edu.gt", movil: "-" },
+            { nombre: "Collado, Rosa María, Licda.", puesto: "Asistente Rector", ubicacion: "Rectoría- Quinto Nivel", nivel: "Quinto Nivel", extension: "501", correo: "-", movil: "4816-0064" },
+            { nombre: "Estrada, Efraín, Mgtr.", puesto: "Vicerrector Académico", ubicacion: "Vicerrectoría Académica- Quinto Nivel", nivel: "Quinto Nivel", extension: "502", correo: "estradahe@umes.edu.gt", movil: "-" },
+            { nombre: "Cardona, Carolina", puesto: "Coordinador Pedagógico", ubicacion: "Vicerrectoría Académica- Quinto Nivel", nivel: "Quinto Nivel", extension: "509", correo: "diazsilvia@umes.edu.gt", movil: "5825-3625" },
+            { nombre: "Castillo, Leonel", puesto: "Asistente Vicerrector Académico", ubicacion: "Vicerrectoría Académica- Quinto Nivel", nivel: "Quinto Nivel", extension: "503", correo: "asistenteviceacademica@umes.edu.gt", movil: "-" },
+            { nombre: "Cruz, Abel, Mgtr.", puesto: "Vicerrector Administrativo Financiero", ubicacion: "Vicerrectoría Administrativa- Quinto Nivel", nivel: "Quinto Nivel", extension: "504", correo: "cruzabel@umes.edu.gt", movil: "-" },
+            { nombre: "Chacón, Vanessa, Licda.", puesto: "Asistente Vicerrector Admin. Financiero", ubicacion: "Vicerrectoría Administrativa- Quinto Nivel", nivel: "Quinto Nivel", extension: "505", correo: "chaconvanessa@umes.edu.gt", movil: "5865-6279" },
+            { nombre: "Cabrera, Luis Fernando, Dr.", puesto: "Vicerrector General", ubicacion: "Vicerrectoría General- Quinto Nivel", nivel: "Quinto Nivel", extension: "506", correo: "cabreralf@umes.edu.gt", movil: "3087-6283" },
+            { nombre: "Mazariegos, Armín, Ing.", puesto: "Gerente de Informática", ubicacion: "Vicerrectoría Administrativa- Quinto Nivel", nivel: "Quinto Nivel", extension: "401", correo: "jmazariegos@umes.edu.gt", movil: "4025-5458" },
+            { nombre: "Meza, Clariza / Clarissa", puesto: "Técnico / Coordinadora de Deportes", ubicacion: "5to nivel", nivel: "Quinto Nivel", extension: "503", correo: "clarissameza@umes.edu.gt", movil: "4212-1831" },
+
+            // --- EDIFICIO L Y B ---
+            { nombre: "Chiroy, Brenda", puesto: "Asistente de Recursos Humanos", ubicacion: "Recursos Humanos- Edificio L", nivel: "Edificio L", extension: "320", correo: "asistenterhumanos@umes.edu.gt", movil: "5043-3436" },
+            { nombre: "Gudiel Corona, Emily Licda.", puesto: "Encargada de recursos humanos", ubicacion: "Recursos Humanos- Edificio L", nivel: "Edificio L", extension: "305", correo: "rhumanos@umes.edu.gt", movil: "3069-3088" },
+            { nombre: "De León, Mario, Mgtr.", puesto: "Coordinador Ciencias Económicas", ubicacion: "Primer Nivel - Edificio L", nivel: "Edificio L", extension: "318", correo: "deleonalejandro@umes.edu.gt", movil: "4975-3633" },
+            { nombre: "Mendieta, María Eugenia", puesto: "Encargada de Escaneo", ubicacion: "Segundo Nivel - Edificio L", nivel: "Edificio L", extension: "-", correo: "escaneoumes@umes.edu.gt", movil: "5301-2629" },
+            { nombre: "Soliz, Oscar", puesto: "Encargado de Laboratorios", ubicacion: "Tercer Nivel- Edificio L", nivel: "Edificio L", extension: "511", correo: "solisoscar@umes.edu.gt / soporte@umes.edu.gt", movil: "4633-6963" },
+            { nombre: "Cabrera, Adolfo, Lic.", puesto: "Encargado de levantamiento de inventario", ubicacion: "Edificio L (Oficina Brenda Chiroy)", nivel: "Edificio L", extension: "321", correo: "inventarioscampuscentral@umes.edu.gt", movil: "5093-3634 / 3088-3313" },
+            { nombre: "Morales, Joshua, Lic.", puesto: "Coordinador Producción Editorial", ubicacion: "Edificio B, tercer nivel", nivel: "Edificio B", extension: "511", correo: "coordinadoreditorial@umes.edu.gt", movil: "4287-9315" },
+
+            // --- PERSONAL DE MANTENIMIENTO, BODEGA Y GARITA ---
+            { nombre: "López, Hilda", puesto: "Encargada de Limpieza", ubicacion: "Bodega Primer Nivel", nivel: "Primer Nivel", extension: "-", correo: "-", movil: "-" },
+            { nombre: "Gaitán, Sara", puesto: "Encargada limpieza apartamentos", ubicacion: "Bodega Primer Nivel", nivel: "Primer Nivel", extension: "-", correo: "-", movil: "4773-4205" },
+            { nombre: "Escalante, Carmen", puesto: "Encargada Limpieza", ubicacion: "Bodega Segundo Nivel", nivel: "Segundo Nivel", extension: "-", correo: "-", movil: "5563-6084" },
+            { nombre: "García, Rebeca", puesto: "Encargada Limpieza", ubicacion: "Bodega Quinto Nivel", nivel: "Quinto Nivel", extension: "-", correo: "-", movil: "-" },
+            { nombre: "Álvarez, Andrés", puesto: "Encargado Limpieza", ubicacion: "Bodega Primer Nivel- Edificio L", nivel: "Edificio L", extension: "-", correo: "-", movil: "4474-2874" },
+            { nombre: "García, Moisés", puesto: "Encargado Limpieza", ubicacion: "Bodega Primer Nivel- Edificio L", nivel: "Edificio L", extension: "-", correo: "-", movil: "-" },
+            { nombre: "Cienfuegos, Carlos", puesto: "Encargado Limpieza", ubicacion: "Bodega Primer Nivel- Edificio L", nivel: "Edificio L", extension: "-", correo: "-", movil: "-" },
+            { nombre: "García, Rony", puesto: "Albañil", ubicacion: "Bodega Primer Nivel parqueo", nivel: "Primer Nivel", extension: "-", correo: "-", movil: "-" },
+            { nombre: "Herrera, William", puesto: "Mensajero", ubicacion: "Bodega Primer Nivel parqueo", nivel: "Primer Nivel", extension: "-", correo: "-", movil: "3043-3870" },
+            { nombre: "Vásquez, Juan José", puesto: "Mensajero", ubicacion: "Garita", nivel: "Garita / Exterior", extension: "201", correo: "-", movil: "-" },
+            { nombre: "González, Delfino", puesto: "Guardia de Seguridad", ubicacion: "Garita", nivel: "Garita / Exterior", extension: "201", correo: "-", movil: "-" },
+            { nombre: "Revolorio, Julio", puesto: "Guardia de Seguridad", ubicacion: "Garita", nivel: "Garita / Exterior", extension: "201", correo: "-", movil: "-" },
+
+            // --- OTROS, DIRECCIONES Y EXTERNOS ---
+            { nombre: "García, Abel, Mgtr.", puesto: "Director Ciencias Económicas", ubicacion: "-", nivel: "Información General", extension: "314", correo: "cecoordinacion@umes.edu.gt", movil: "3043-5303" },
+            { nombre: "Zarat, Luis Arnoldo", puesto: "Director de Ingenieria", ubicacion: "-", nivel: "Información General", extension: "404", correo: "direccion.ingenieria@umes.edu.gt", movil: "4280-7401" },
+            { nombre: "Monroy, Jose Manuel, Lic.", puesto: "Ejecutivo", ubicacion: "-", nivel: "Información General", extension: "-", correo: "ejecutivo4@umes.edu.gt", movil: "5131-8068" },
+            { nombre: "Campos, Juan Carlos, Ing.", puesto: "Arquitecto UMES", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "5715-1308" },
+            { nombre: "Serrano Ursúa, Felix Javier, Dr.", puesto: "Docente (Anterior Rector)", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "5414-6273" },
+            { nombre: "Najera, Nieves", puesto: "Alcaldía Municipal Zona 8", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "3569-1292" },
+            { nombre: "Dannya y Diego", puesto: "Contact Center WhatsApp", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "24754068" },
+            { nombre: "Información de Becas", puesto: "Consultas de Becas", ubicacion: "-", nivel: "Información General", extension: "7932-9000 Ext 277", correo: "becas@umes.edu.gt", movil: "-" },
+            { nombre: "Fernandez, Pedro", puesto: "Soporte Técnico / Laboratorios", ubicacion: "-", nivel: "Información General", extension: "309", correo: "soporte@umes.edu.gt", movil: "5838-5236" },
+            { nombre: "Barrera, Marvin, Arq. / Osoy, Gustavo", puesto: "Arquitecto UMES / Albañil", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "4203-5321 / 4402-3550" },
+            { nombre: "Velez, Maria Elena, Lic.", puesto: "Coordinadora de teología", ubicacion: "-", nivel: "Información General", extension: "-", correo: "-", movil: "5990-8072" },
+            { nombre: "Correo General UMES", puesto: "Información o dudas, plazas", ubicacion: "-", nivel: "Información General", extension: "-", correo: "info@umes.edu.gt", movil: "-" }
+        ];
+
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const levelFilter = document.getElementById('levelFilter');
+        const resultCount = document.getElementById('resultCount');
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+
+            resultCount.textContent = `${data.length} contacto${data.length !== 1 ? 's' : ''}`;
+
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="empty-state">No se encontraron contactos que coincidan con la búsqueda.</td></tr>';
+                return;
+            }
+
+            data.forEach(person => {
+                const row = document.createElement('tr');
+                const emailLink = (person.correo && person.correo !== '-')
+                    ? `<a href="mailto:${person.correo.split(' / ')[0]}" class="email-link">${person.correo}</a>`
+                    : '<span style="color:#ccc">-</span>';
+
+                row.innerHTML = `
+                    <td><strong>${person.nombre}</strong></td>
+                    <td>${person.puesto}</td>
+                    <td><span class="badge">${person.ubicacion || '-'}</span></td>
+                    <td><strong>${person.extension}</strong></td>
+                    <td>${emailLink}</td>
+                    <td>${person.movil}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterDirectory() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedLevel = levelFilter.value;
+
+            const filteredData = directoryData.filter(person => {
+                const searchString = `${person.nombre} ${person.puesto} ${person.correo} ${person.extension} ${person.movil}`.toLowerCase();
+                const matchesSearch = searchString.includes(searchTerm);
+                const matchesLevel = selectedLevel === 'Todos' || person.nivel === selectedLevel;
+
+                return matchesSearch && matchesLevel;
+            });
+
+            renderTable(filteredData);
+        }
+
+        searchInput.addEventListener('input', filterDirectory);
+        levelFilter.addEventListener('change', filterDirectory);
+
+        // Iniciar renderizando todos los datos
+        renderTable(directoryData);
+    </script>
+</body>
+</html>

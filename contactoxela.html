@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Directorio Xela - UMES</title>
+    <style>
+        :root {
+            var(--primary-color): #0b4a36;
+            --primary-color: #0b4a36;
+            --secondary-color: #126349;
+            --background-light: #f4f7f6;
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --border-color: #e0e6ed;
+            --hover-color: #e8f0fe;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo-umes {
+            height: 70px;
+            background-color: var(--text-light);
+            padding: 5px 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-title-container h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header-title-container p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 15px;
+            background-color: #ffffff;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .counter {
+            background-color: rgba(255,255,255,0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        input[type="text"], select {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .table-container {
+            background-color: var(--text-light);
+            border-radius: 8px;
+            overflow-x: auto;
+            max-height: 70vh;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th, td {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--secondary-color);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+
+        tbody tr:hover {
+            background-color: #eaf1ef;
+        }
+
+        .badge-zona3 {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-americas {
+            background-color: #fce4ec;
+            color: #c2185b;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="logo.png" alt="Logo UMES" class="logo-umes">
+            <div class="header-title-container">
+                <h1>Directorio Telefónico Xela</h1>
+                <p>Campus Zona 3 (PBX: 7932-9000) / Campus Las Américas (PBX: 7728-8400)</p>
+                <a href="DirectorioUmes.html" class="btn-back">⬅ Volver a Campus Central</a>
+            </div>
+        </div>
+        <div class="counter" id="resultCount">0 contactos</div>
+    </header>
+
+    <main>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, oficina o extensión...">
+            <select id="campusFilter">
+                <option value="Todos">Todos los Campus</option>
+                <option value="Campus Zona 3">Campus Zona 3</option>
+                <option value="Campus Las Américas">Campus Las Américas</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table id="directoryTable">
+                <thead>
+                    <tr>
+                        <th>Nombre / Encargado</th>
+                        <th>Oficina / Puesto</th>
+                        <th>Campus</th>
+                        <th>Extensión / PBX</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        const directoryData = [
+            // --- CAMPUS ZONA 3 (PBX: 7932-9000) ---
+            { ext: "233", oficina: "Asistente de Contabilidad", nombre: "Paola Archila", campus: "Campus Zona 3" },
+            { ext: "245", oficina: "Asistentes de Dirección General y Académica", nombre: "Inga. Claudia León y Lcda. Zoila Mazariegos (Tel: 42006391)", campus: "Campus Zona 3" },
+            { ext: "208", oficina: "Asistente de Dirección Administrativa", nombre: "Matilde Dominguez", campus: "Campus Zona 3" },
+            { ext: "237", oficina: "Asesora Jurídica", nombre: "Lcda. Leslie Ríos y Luz Cecilia Robles", campus: "Campus Zona 3" },
+            { ext: "212", oficina: "Asistente de Tesorería", nombre: "Shirley Mazariegos", campus: "Campus Zona 3" },
+            { ext: "244", oficina: "Apoyo Pedagógico 1", nombre: "Mgtr. Mirna Cifuentes", campus: "Campus Zona 3" },
+            { ext: "246", oficina: "Apoyo Pedagógico 2", nombre: "Mgtr. Irma de León", campus: "Campus Zona 3" },
+            { ext: "230", oficina: "ATD (Apoyo Tecnológico al Docente)", nombre: "Cristian Rodas, Inga. Nancy Morales", campus: "Campus Zona 3" },
+            { ext: "277", oficina: "Becas", nombre: "Ing. Cesar Barrera", campus: "Campus Zona 3" },
+            { ext: "226", oficina: "Biblioteca", nombre: "Oscar Leonel Arango", campus: "Campus Zona 3" },
+            { ext: "241", oficina: "Bodega", nombre: "Josué Ardiano", campus: "Campus Zona 3" },
+            { ext: "205", oficina: "Caja", nombre: "Nohemi Rosal y Silvia Argueta", campus: "Campus Zona 3" },
+            { ext: "219", oficina: "Coordinación Diseño Gráfico", nombre: "Lic. Carlos Eduardo Miralbes", campus: "Campus Zona 3" },
+            { ext: "262", oficina: "Calidad Institucional", nombre: "In. Onásis Rodas, Ing. Juan Bagur", campus: "Campus Zona 3" },
+            { ext: "259", oficina: "Clínica Psicológica", nombre: "Mgtr. Karina Juárez y Padre Orlando Pérez", campus: "Campus Zona 3" },
+            { ext: "239", oficina: "Clínica SSO", nombre: "Lic. Luzmaría Gonzáles", campus: "Campus Zona 3" },
+            { ext: "220", oficina: "Community Manager", nombre: "Lic. Daniel Ixmatá", campus: "Campus Zona 3" },
+            { ext: "243", oficina: "Coordinación de Deportes", nombre: "Lic. Luis Samayoa", campus: "Campus Zona 3" },
+            { ext: "255", oficina: "Coordinación de Profesorados en Inglés", nombre: "Licda. Wendy Detlefsen", campus: "Campus Zona 3" },
+            { ext: "213", oficina: "Decanatura Arquitectura", nombre: "Arq. Jorge Ixquiac", campus: "Campus Zona 3" },
+            { ext: "254", oficina: "Decanatura Ciencias Económicas", nombre: "Mgtr. Mayra López", campus: "Campus Zona 3" },
+            { ext: "216", oficina: "Decanatura Odontología", nombre: "Dra. Nicthé Rodas", campus: "Campus Zona 3" },
+            { ext: "209", oficina: "Dirección Académica", nombre: "Mgtr. Miriam Maldonado", campus: "Campus Zona 3" },
+            { ext: "234", oficina: "Dirección Administrativa", nombre: "Ing. Erick Günac", campus: "Campus Zona 3" },
+            { ext: "214", oficina: "Dirección de Ciencias de la Comunicación Social", nombre: "Mgtr. Astrid Ovalle", campus: "Campus Zona 3" },
+            { ext: "258", oficina: "Dirección Clínicas de Odontología", nombre: "Dra. Ángela Morales", campus: "Campus Zona 3" },
+            { ext: "221", oficina: "Dirección Departamento de Pedagogía", nombre: "Mgtr. Adela Argueta", campus: "Campus Zona 3" },
+            { ext: "215", oficina: "Dirección de Ciencias Jurídicas y Sociales", nombre: "Mgtr. Estuardo Barrios", campus: "Campus Zona 3" },
+            { ext: "207", oficina: "Dirección General", nombre: "Mgtr. Raúl Vielman", campus: "Campus Zona 3" },
+            { ext: "210", oficina: "Dirección de Informática", nombre: "Mgtr. Juan Deyet", campus: "Campus Zona 3" },
+            { ext: "250", oficina: "Dirección de Mercadeo y Publicidad", nombre: "Lcda. Marcia Contreras Lira", campus: "Campus Zona 3" },
+            { ext: "263", oficina: "Diseñador Gráfico", nombre: "Luis Enrique de León", campus: "Campus Zona 3" },
+            { ext: "231", oficina: "Dispensario Odontología", nombre: "Francisco Barrios y Jener Colop", campus: "Campus Zona 3" },
+            { ext: "228", oficina: "Esterilización", nombre: "Lorena de León y Lcda. Telma Pérez", campus: "Campus Zona 3" },
+            { ext: "247", oficina: "Garita (parqueo)", nombre: "José Ajuchan y Gerónimo González", campus: "Campus Zona 3" },
+            { ext: "201", oficina: "Información Edificio A", nombre: "Mildred Legrand y Lcda. Alejandra Cajas", campus: "Campus Zona 3" },
+            { ext: "200", oficina: "Información Edificio L", nombre: "Lcda. Lourdes Quic y Mishelle Vásquez", campus: "Campus Zona 3" },
+            { ext: "266", oficina: "Inventarios", nombre: "Adolfo Aguilar y Oscar Tay", campus: "Campus Zona 3" },
+            { ext: "235", oficina: "Jefe de Contabilidad", nombre: "Lic. Billy Rodas", campus: "Campus Zona 3" },
+            { ext: "264", oficina: "Jefe de Laboratorios", nombre: "Luis Alejandro Castro", campus: "Campus Zona 3" },
+            { ext: "224", oficina: "Jefe de Registro", nombre: "Mgtr. Miriam Lucrecia Tahay", campus: "Campus Zona 3" },
+            { ext: "260", oficina: "Laboratorio 3", nombre: "José Luis Yax y Hugo de León", campus: "Campus Zona 3" },
+            { ext: "240", oficina: "Laboratorio 4", nombre: "Julia Jocol y Cristiand Orozco", campus: "Campus Zona 3" },
+            { ext: "238", oficina: "Laboratorio 7", nombre: "Ángel Hernández", campus: "Campus Zona 3" },
+            { ext: "236", oficina: "Laboratorio Mac", nombre: "José Estrada y Juan Ola", campus: "Campus Zona 3" },
+            { ext: "253", oficina: "Laboratorio Radio y Tv.", nombre: "Mgtr. Antonelli Rodas y Mgtr. Wilman López", campus: "Campus Zona 3" },
+            { ext: "225", oficina: "Pastoral", nombre: "Sor Aida de León y Mgtr. María Mercedes Galindo", campus: "Campus Zona 3" },
+            { ext: "217", oficina: "Recepción Casa Luna", nombre: "Celeste Citá", campus: "Campus Zona 3" },
+            { ext: "249", oficina: "Redes y Programas 1", nombre: "Ing. Enrique López", campus: "Campus Zona 3" },
+            { ext: "242", oficina: "Redes y Programas 2", nombre: "Ing. Guillermo Ramírez", campus: "Campus Zona 3" },
+            { ext: "222", oficina: "Recepción de Clínicas", nombre: "Mishelli Morales y Melfin Cacatzum", campus: "Campus Zona 3" },
+            { ext: "223", oficina: "Recursos Humanos", nombre: "Mgtr. Adriana Castillo", campus: "Campus Zona 3" },
+            { ext: "202", oficina: "Registro Académico 1", nombre: "Zuly Toyom", campus: "Campus Zona 3" },
+            { ext: "203", oficina: "Registro Académico 2", nombre: "Carolina Barrios", campus: "Campus Zona 3" },
+            { ext: "204", oficina: "Registro Académico 3", nombre: "Ilse Chavarría", campus: "Campus Zona 3" },
+            { ext: "248", oficina: "Registro Académico 4", nombre: "Verónica Calderón", campus: "Campus Zona 3" },
+            { ext: "206", oficina: "Secretaría de Dirección / Asist. Lic. Sleeder", nombre: "Lizeth King y Ana Lucía Carranza", campus: "Campus Zona 3" },
+            { ext: "251", oficina: "Secretaria Dirección Clínicas de Odontología", nombre: "Eduardo Maldonado", campus: "Campus Zona 3" },
+            { ext: "218", oficina: "Secretaria de Decanatura Odontología", nombre: "Ana Cristina Estrada", campus: "Campus Zona 3" },
+            { ext: "227", oficina: "Sala de Lectura", nombre: "María José Mazariegos", campus: "Campus Zona 3" },
+            { ext: "261", oficina: "Sala de Lectura Grupal", nombre: "Lilian Nolasco", campus: "Campus Zona 3" },
+            { ext: "265", oficina: "Seguridad Ingreso Edificio A", nombre: "Ignasio Sam y Gerson Ramírez", campus: "Campus Zona 3" },
+            { ext: "268", oficina: "Seguridad Ingreso Edifico L", nombre: "Santiago Guzmán y Alvaro Pérez", campus: "Campus Zona 3" },
+            { ext: "232", oficina: "Supervisor Docente I", nombre: "Mgtr. Juan José Bernabé", campus: "Campus Zona 3" },
+            { ext: "256", oficina: "Supervisor Docente 2", nombre: "Lic. Gerardo Gramajo", campus: "Campus Zona 3" },
+            { ext: "257", oficina: "Supervisor Docente 3", nombre: "Lcda. Ruth Juárez", campus: "Campus Zona 3" },
+            { ext: "211", oficina: "Tesorería Casa Luna", nombre: "Mgtr. Ileana Aguilar Morales", campus: "Campus Zona 3" },
+
+            // --- CAMPUS LAS AMERICAS (PBX: 7728-8400) ---
+            { ext: "105", oficina: "Asistente de Decanatura", nombre: "Sonia Rosales", campus: "Campus Las Américas" },
+            { ext: "116", oficina: "Auxiliar Administrativo", nombre: "Sara Luisa Galindo", campus: "Campus Las Américas" },
+            { ext: "111", oficina: "Biblioteca", nombre: "Junior Orellana", campus: "Campus Las Américas" },
+            { ext: "77652530", oficina: "Facultad de Medicina", nombre: "Sonia Rosales", campus: "Campus Las Américas" },
+            { ext: "120", oficina: "Coordinadora el Área de Inglés", nombre: "Lcda. Marina Parfenova", campus: "Campus Las Américas" },
+            { ext: "103", oficina: "Coordinador Hospitalario", nombre: "Dr. Jorge Ramos", campus: "Campus Las Américas" },
+            { ext: "114", oficina: "Coordinador UGTIS", nombre: "Isabel Zelada", campus: "Campus Las Américas" },
+            { ext: "104", oficina: "Decano Medicina", nombre: "Dr. Juan Carlos Moir", campus: "Campus Las Américas" },
+            { ext: "115", oficina: "Decano Ingeniería", nombre: "Ing. Richard Mazariegos", campus: "Campus Las Américas" },
+            { ext: "102", oficina: "Dirección Administrativa", nombre: "Licda. Erick Leonel Hernnadez", campus: "Campus Las Américas" },
+            { ext: "118", oficina: "Laboratorio Computación", nombre: "Isaías López", campus: "Campus Las Américas" },
+            { ext: "110", oficina: "Laboratorio Medicina", nombre: "Selvin Ruiz", campus: "Campus Las Américas" },
+            { ext: "119", oficina: "Laboratorio Tecnología", nombre: "Mauricio Cayax", campus: "Campus Las Américas" },
+            { ext: "101", oficina: "Recepción las Américas", nombre: "Paola Alvarado", campus: "Campus Las Américas" },
+            { ext: "112", oficina: "Secretaria Administrativa", nombre: "Alejandra Gonzalez", campus: "Campus Las Américas" },
+            { ext: "106", oficina: "Secretaria Coordinación", nombre: "Jennifer Castillo", campus: "Campus Las Américas" },
+            { ext: "115", oficina: "Secretaría Decanatura de Ingeniería", nombre: "Estefannie Soch", campus: "Campus Las Américas" },
+            { ext: "117", oficina: "Supervisor Ingeniería", nombre: "Leonel Ixcoy", campus: "Campus Las Américas" },
+            { ext: "107", oficina: "Secretaria Medicina", nombre: "Julia Delgado", campus: "Campus Las Américas" },
+            { ext: "108", oficina: "Secretaría Medicina", nombre: "Guadalupe Alvarado", campus: "Campus Las Américas" },
+            { ext: "109", oficina: "Supervisor Medicina", nombre: "Porfirio Morales", campus: "Campus Las Américas" },
+            { ext: "112", oficina: "Recepción las Américas", nombre: "Campus las Américas", campus: "Campus Las Américas" }
+        ];
+
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const campusFilter = document.getElementById('campusFilter');
+        const resultCount = document.getElementById('resultCount');
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            resultCount.textContent = `${data.length} contacto${data.length !== 1 ? 's' : ''}`;
+
+            data.forEach(person => {
+                const row = document.createElement('tr');
+                const badgeClass = person.campus === 'Campus Zona 3' ? 'badge-zona3' : 'badge-americas';
+
+                row.innerHTML = `
+                    <td><strong>${person.nombre}</strong></td>
+                    <td>${person.oficina}</td>
+                    <td><span class="${badgeClass}">${person.campus}</span></td>
+                    <td><strong>${person.ext}</strong></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterDirectory() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const selectedCampus = campusFilter.value;
+
+            const filteredData = directoryData.filter(person => {
+                const searchString = `${person.nombre} ${person.oficina} ${person.ext}`.toLowerCase();
+                const matchesSearch = searchString.includes(searchTerm);
+                const matchesCampus = selectedCampus === 'Todos' || person.campus === selectedCampus;
+
+                return matchesSearch && matchesCampus;
+            });
+
+            renderTable(filteredData);
+        }
+
+        searchInput.addEventListener('input', filterDirectory);
+        campusFilter.addEventListener('change', filterDirectory);
+        renderTable(directoryData);
+    </script>
+</body>
+</html>
