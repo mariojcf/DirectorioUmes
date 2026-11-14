@@ -147,6 +147,7 @@
             { campus: "Central", nombre: "Corado, Mario", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion2@umes.edu.gt", movil: "-" },
             { campus: "Central", nombre: "Montenegro, Douglas", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300 / 503", correo: "recepcion3@umes.edu.gt", movil: "5856-8068" },
             { campus: "Central", nombre: "Jeronimo, Andrea", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion4@umes.edu.gt", movil: "-" },
+            { campus: "Central", nombre: "Chacón, Wendy", puesto: "Recepcionista", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "300", correo: "recepcion5@umes.edu.gt", movil: "-" },
             { campus: "Central", nombre: "Rodas, Otto, Lic.", puesto: "Ejecutivo de admisiones", ubicacion: "Recepción - Primer Nivel", nivel: "Primer Nivel", extension: "409", correo: "ejecutivo2@umes.edu.gt", movil: "3647-2852" },
 
             // SEGUNDO Y TERCER NIVEL
@@ -334,7 +335,6 @@
         const headerSubtitle = document.getElementById('headerSubtitle');
         const pbxBadge = document.getElementById('pbxBadge');
 
-        // Normalizar texto (quita tildes para búsquedas rápidas)
         function normalizeText(str) {
             return (str || '').toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
@@ -452,7 +452,6 @@
             renderTable(filtered);
         }
 
-        // Cambio de pestañas
         document.querySelectorAll('.campus-tab').forEach(tab => {
             tab.addEventListener('click', () => {
                 document.querySelectorAll('.campus-tab').forEach(t => {
@@ -477,7 +476,6 @@
             filterDirectory();
         });
 
-        // Atajo de teclado "/" para buscar rápido
         document.addEventListener('keydown', (e) => {
             if (e.key === '/' && document.activeElement !== searchInput) {
                 e.preventDefault();
